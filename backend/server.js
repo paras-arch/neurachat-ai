@@ -26,7 +26,7 @@ const embeddings =
         })
         : new GoogleGenerativeAIEmbeddings({
             apiKey: process.env.GOOGLE_API_KEY,
-            model: "text-embedding-004",
+            modelName: "embedding-001",
         });
 
 const model = process.env.LLM_PROVIDER === "ollama"
