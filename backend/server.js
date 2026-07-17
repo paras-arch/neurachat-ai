@@ -4,7 +4,6 @@ const cors = require("cors");
 require("dotenv").config();
 
 const { OllamaEmbeddings } = require("@langchain/ollama");
-const { GoogleGenerativeAIEmbeddings } = require("@langchain/google-genai");
 const { ChatOpenAI } = require("@langchain/openai");
 const { MongoDBAtlasVectorSearch } = require("@langchain/mongodb");
 
@@ -17,17 +16,7 @@ const app = express();
 app.use(cors({ origin: process.env.CORS_ORIGIN || "*" }));
 app.use(express.json());
 
-// const embeddings = new OllamaEmbeddings({ model: "nomic-embed-text", baseUrl: "http://127.0.0.1:11434" });
-const embeddings =
-    process.env.EMBEDDING_PROVIDER === "ollama"
-        ? new OllamaEmbeddings({
-            model: "nomic-embed-text",
-            baseUrl: "http://127.0.0.1:11434",
-        })
-        : new GoogleGenerativeAIEmbeddings({
-            apiKey: process.env.GOOGLE_API_KEY,
-            modelName: "embedding-001",
-        });
+const embeddings = new OllamaEmbeddings({ model: "nomic-embed-text", baseUrl: "http://127.0.0.1:11434" });
 
 const model = process.env.LLM_PROVIDER === "ollama"
     ? new ChatOpenAI({ apiKey: "ollama", configuration: { baseURL: "http://127.0.0.1:11434/v1" }, model: process.env.OLLAMA_MODEL || "llama3", temperature: 0.2 })
